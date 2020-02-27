@@ -1,9 +1,10 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const rulesController = require('./../controllers/rulesController');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.send('Hello World');
-});
+router
+  .route('/')
+  .post(rulesController.validateRule, rulesController.createRule);
 
 module.exports = router;
