@@ -26,7 +26,7 @@ exports.validateRule = (req, res, next) => {
     });
   }
 
-  if (!req.body.type in types) {
+  if (!types.includes(req.body.type)) {
     return res.status(400).json({
       message: 'Invalid type of rule'
     });
