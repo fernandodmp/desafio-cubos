@@ -58,11 +58,11 @@ exports.createRule = (req, res, next) => {
     JSON.stringify(rules),
     err => {
       if (err) {
-        res
+        return res
           .status(500)
           .json({ message: 'Something went wrong, please try again later' });
       } else {
-        res.status(201).json({
+        return res.status(201).json({
           rule: newRule
         });
       }
@@ -71,7 +71,41 @@ exports.createRule = (req, res, next) => {
 };
 
 exports.getAllRules = (req, res, next) => {
-  res.status(200).json({
+  return res.status(200).json({
     rules
   });
+};
+
+exports.getSingleRule = (req, res, next) => {
+  const ruleIndex = rules.findIndex(el => el.id === req.params.id);
+  if (ruleIndex === -1) {
+    return res.status(404).json({ message: 'Rule not found' });
+  }
+
+  const rule = rules[ruleIndex];
+
+  return res.status(200).json({ rule: rule });
+};
+
+exports.deleteRule = (req, res, next) => {
+  const ruleIndex = rules.findIndex(el => el.id === req.params.id);
+  if (ruleIndex === -1) {
+    return res.status(404).json({ message: 'Rule not found' });
+  }
+
+  rules.splice(ruleIndex, 1);
+
+  fs.writeFile(
+    `${__dirname}/../data/schedulingRules.json`,
+    JSON.stringify(rules),
+    err => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: 'Something went wrong, please try again later' });
+      } else {
+        return res.status(204).json({});
+      }
+    }
+  );
 };

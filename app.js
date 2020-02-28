@@ -1,10 +1,10 @@
-var express = require('express');
+const express = require('express');
 
-var logger = require('morgan');
+const logger = require('morgan');
 
-var rulesRouter = require('./routes/rulesRouter');
+const rulesRouter = require('./routes/rulesRouter');
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -7,4 +7,9 @@ router
   .route('/')
   .post(rulesController.validateRule, rulesController.createRule)
   .get(rulesController.getAllRules);
+
+router
+  .route('/:id')
+  .get(rulesController.getSingleRule)
+  .delete(rulesController.deleteRule);
 module.exports = router;
