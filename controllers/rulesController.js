@@ -173,5 +173,5 @@ exports.getAvailableTimes = (req, res, next) => {
     date.day = dateFormat(date.day, 'dd-mm-yyyy');
   });
 
-  res.status(200).json({ days: dateSequence });
+  res.status(200).json(dateSequence);
 };
