@@ -1,3 +1,5 @@
+const timeRegex = '^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$';
+
 exports.BasicRuleSchema = {
   id: '/BasicRuls',
   type: 'object',
@@ -6,8 +8,8 @@ exports.BasicRuleSchema = {
       type: 'string',
       enum: ['weekly', 'daily', 'singleDay']
     },
-    start: { type: 'string' },
-    end: { type: 'string' }
+    start: { type: 'string', format: timeRegex },
+    end: { type: 'string', pattern: timeRegex }
   },
   required: ['start', 'end']
 };

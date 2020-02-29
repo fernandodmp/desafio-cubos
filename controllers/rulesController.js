@@ -1,6 +1,8 @@
 const fs = require('fs');
 const uuid = require('short-uuid');
 const dateFormat = require('dateformat');
+const { createDateSequence, getWeekDay } = require('./../utils/dateUtils');
+const rulesValidator = require('./../validators/rulesValidators');
 
 const rules = JSON.parse(
   fs.readFileSync(`${__dirname}/../data/schedulingRules.json`)
@@ -9,6 +11,20 @@ const rules = JSON.parse(
 exports.createRule = (req, res, next) => {
   const newId = uuid.generate();
   const newRule = Object.assign({ id: newId }, req.body);
+
+  let conflict = false;
+  rules.forEach(rule => {
+    if (rulesValidator.timeConflict(rule, newRule)) {
+      conflict = true;
+    }
+  });
+
+  if (conflict) {
+    return res.status(400).json({
+      message:
+        'The rule cannot be created due to conflicting time with other rules'
+    });
+  }
 
   rules.push(newRule);
 
@@ -71,41 +87,6 @@ exports.deleteRule = (req, res, next) => {
   );
 };
 
-const createDateSequence = (initialDate, finalDate) => {
-  const dayInMs = 1000 * 60 * 60 * 24;
-  const daysBetween = (finalDate.getTime() - initialDate.getTime()) / dayInMs;
-
-  const dateSequence = [{ day: initialDate, intervals: [] }];
-
-  for (i = 1; i < daysBetween; i++) {
-    dateSequence.push({
-      day: new Date(initialDate.getTime() + i * dayInMs),
-      intervals: []
-    });
-  }
-
-  dateSequence.push({ day: finalDate, intervals: [] });
-
-  return dateSequence;
-};
-
-const convertDayOfTheWeek = day => {
-  const daysOfTheWeek = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday'
-  ];
-  return daysOfTheWeek[day];
-};
-
-/* const formatDateDDMMYYYY = date => {
-  return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-}; */
-
 exports.getAvailableTimes = (req, res, next) => {
   const dateSequence = createDateSequence(
     new Date(req.body.initialDate),
@@ -118,14 +99,14 @@ exports.getAvailableTimes = (req, res, next) => {
         rule.type === 'singleDay' &&
         date.day.getTime() === new Date(rule.date).getTime()
       ) {
-        date.intervals.push({ start: rule.start, end: rule.end });
+        date.addInterval({ start: rule.start, end: rule.end });
       } else if (
         rule.type === 'weekly' &&
-        rule.weekdays.includes(convertDayOfTheWeek(date.day.getDay()))
+        rule.weekdays.includes(getWeekDay(date.day))
       ) {
-        date.intervals.push({ start: rule.start, end: rule.end });
+        date.addInterval({ start: rule.start, end: rule.end });
       } else if (rule.type === 'daily') {
-        date.intervals.push({ start: rule.start, end: rule.end });
+        date.addInterval({ start: rule.start, end: rule.end });
       }
     });
 
