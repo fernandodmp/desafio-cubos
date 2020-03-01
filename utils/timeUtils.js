@@ -26,5 +26,5 @@ exports.checkTimeConlict = (
   const firstEndDate = createDateObject(firstEndTime);
   const secondStartDate = createDateObject(secondStartTime);
   const secondEndDate = createDateObject(secondEndTime);
-  return firstStartDate <= secondEndDate && firstEndDate >= secondStartDate;
+  return firstStartDate < secondEndDate && firstEndDate > secondStartDate;
 };
