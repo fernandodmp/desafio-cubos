@@ -14,7 +14,7 @@ O servidor fica disponível em http://localhost:8000
 
 Na pasta dev-data se encontrão uma versão offline da documentação da API e a coleção de requisições do Postman solicitada.
 
-A versão online da documentação se encontra em: https://app.swaggerhub.com/apis-docs/fernandodmp/ApiDesafioCubos/1.0.0-oas3 (VERSÃO RECOMENDADA)
+A versão online da documentação se encontra [Aqui](https://app.swaggerhub.com/apis-docs/fernandodmp/ApiDesafioCubos/1.0.0-oas3) (VERSÃO RECOMENDADA)
 
 ## Conquistas
 
