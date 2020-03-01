@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
 const rulesRouter = require('./routes/rulesRouter');
+const timesRouter = require('./routes/timesRouter');
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/v1/rules', rulesRouter);
+app.use('/api/v1/times', timesRouter);
 
 module.exports = app;

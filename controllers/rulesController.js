@@ -89,8 +89,8 @@ exports.deleteRule = (req, res, next) => {
 
 exports.getAvailableTimes = (req, res, next) => {
   const dateSequence = createDateSequence(
-    new Date(req.body.initialDate),
-    new Date(req.body.finalDate)
+    new Date(req.query.initialDate),
+    new Date(req.query.finalDate)
   );
 
   dateSequence.forEach(date => {
